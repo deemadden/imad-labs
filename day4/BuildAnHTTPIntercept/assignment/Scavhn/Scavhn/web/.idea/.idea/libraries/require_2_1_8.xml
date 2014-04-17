@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="require-2.1.8" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/resources/js/lib/dev/require.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/resources/js/lib/require-2.1.8.min.js" />
+      <root url="file://$PROJECT_DIR$/resources/js/lib/dev/require.js" />
+    </CLASSES>
+    <DOCUMENTATION>
+      <root url="http://requirejs.org/docs/api.html" />
+    </DOCUMENTATION>
+    <SOURCES />
+  </library>
+</component>

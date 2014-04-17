@@ -1,0 +1,6 @@
+<div>
+  <h2 ng-hide="scavs.length<1">Scavenger Hunt<span ng-hide="scavs.length<2">s</span></h2>
+  <ul class="fcv scav-level-items">
+    <li ng-repeat="scav in scavs">{{ scav.level }}: <a href="#/detail/{{ scav.name }}">{{ scav.name }}</a></li>
+  </ul>
+</div>

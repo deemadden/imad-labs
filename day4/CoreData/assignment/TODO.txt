@@ -1,0 +1,33 @@
+Build the ScavItem entity with the following attributes:
+
+attribute name   type
+--------------   -------------
+coordinates      Transformable
+hint             String
+name             String
+pointColor       String
+pointValue       Integer 16
+scavItemId       String
+status           String
+thumbnail        String
+thumbnailType    String
+
+Relationships
+-------------
+In the Scav entity, create a relationship called scavItems with the following options:
+Properties: Optional
+Destination: ScavItem
+Delete Rule: Cascade
+Type: To Many
+
+In the ScavItem entity, Create a relationship called scavParent with the following options:
+
+Destination: Scav
+Inverse:  scavItems
+Delete Rule: Nullify
+Type: To One
+Inverse: scavItems
+
+Go BACK to the Scav entity and navigate back to the relationships.
+Set the Inverse Property on the scavItems relationship to scavParent.
+

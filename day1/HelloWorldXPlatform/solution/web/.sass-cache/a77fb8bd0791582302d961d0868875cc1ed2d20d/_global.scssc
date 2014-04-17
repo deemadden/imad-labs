@@ -1,0 +1,939 @@
+3.2.10 (Media Mark)
+21d42a84dc647c05a6c456d76fdc79e2357a28fe
+o:Sass::Tree::RootNode
+:@template"å/@import "../functions";
+//
+// Foundation Variables
+//
+
+
+$experimental: true !default;
+
+// The default font-size is set to 100% of the browser style sheet (usually 16px)
+// for compatibility with brower-based text zoom or user-set defaults.
+
+// Since the typical default browser font-size is 16px, that makes the calculation for grid size.
+// If you want your base font-size to be different and not have it affect the grid breakpoints,
+// set $rem-base to $base-font-size and make sure $base-font-size is a px value.
+$base-font-size: 100% !default;
+
+// $base-line-height is 24px while $base-font-size is 16px
+$base-line-height: 150% !default;
+
+// This is the default html and body font-size for the base rem value.
+$rem-base: 16px !default;
+
+// Use Open Sans font
+$include-open-sans: true !default;
+
+//
+// Global Foundation Mixins
+//
+
+// @mixins
+//
+// We use this to control border radius.
+// $radius - Default: $global-radius || 4px
+@mixin radius($radius:$global-radius) {
+  @if $radius {
+    @if $experimental {
+      -webkit-border-radius: $radius;
+    }
+    border-radius: $radius;
+  }
+}
+
+// @mixins
+//
+// We use this to create equal side border radius on elements.
+// $side - Options: left, right, top, bottom
+@mixin side-radius($side, $radius:$global-radius) {
+  @if $side == left {
+    @if $experimental {
+      -moz-border-radius-bottomleft: $radius;
+      -moz-border-radius-topleft: $radius;
+      -webkit-border-bottom-left-radius: $radius;
+      -webkit-border-top-left-radius: $radius;
+    }
+    border-bottom-left-radius: $radius;
+    border-top-left-radius: $radius;
+  }
+  @else if $side == right {
+    @if $experimental {
+      -moz-border-radius-topright: $radius;
+      -moz-border-radius-bottomright: $radius;
+      -webkit-border-top-right-radius: $radius;
+      -webkit-border-bottom-right-radius: $radius;
+    }
+    border-top-right-radius: $radius;
+    border-bottom-right-radius: $radius;
+  }
+  @else if $side == top {
+    @if $experimental {
+      -moz-border-radius-topright: $radius;
+      -moz-border-radius-topleft: $radius;
+      -webkit-border-top-right-radius: $radius;
+      -webkit-border-top-left-radius: $radius;
+    }
+    border-top-right-radius: $radius;
+    border-top-left-radius: $radius;
+  }
+  @else if $side == bottom {
+    @if $experimental {
+      -moz-border-radius-bottomright: $radius;
+      -moz-border-radius-bottomleft: $radius;
+      -webkit-border-bottom-right-radius: $radius;
+      -webkit-border-bottom-left-radius: $radius;
+    }
+    border-bottom-right-radius: $radius;
+    border-bottom-left-radius: $radius;
+  }
+}
+
+// @mixins
+//
+// We can control whether or not we have inset shadows edges.
+// $active - Default: true, Options: false
+@mixin inset-shadow($active:true) {
+  @if $experimental {
+    -webkit-box-shadow: $shiny-edge-size $shiny-edge-color inset;
+  }
+  box-shadow: $shiny-edge-size $shiny-edge-color inset;
+
+  @if $active { &:active {
+    @if $experimental {
+      -webkit-box-shadow: $shiny-edge-size $shiny-edge-active-color inset;
+    }
+    box-shadow: $shiny-edge-size $shiny-edge-active-color inset; } }
+}
+
+// @mixins
+//
+// We use this to add transitions to elements
+// $property - Default: all, Options: http://www.w3.org/TR/css3-transitions/#animatable-properties
+// $speed - Default: 300ms
+// $ease - Default:ease-out, Options: http://css-tricks.com/almanac/properties/t/transition-timing-function/
+@mixin single-transition($property:all, $speed:300ms, $ease:ease-out) {
+  @if $experimental {
+    -webkit-transition: $property $speed $ease;
+    -moz-transition: $property $speed $ease;
+  }
+  transition: $property $speed $ease;
+}
+
+// @mixins
+//
+// We use this to add box-sizing across browser prefixes
+@mixin box-sizing($type:border-box) {
+  @if $experimental {
+    -moz-box-sizing: $type;
+    -webkit-box-sizing: $type;
+  }
+  box-sizing: $type;
+}
+
+// @mixins
+//
+// We use this to create equilateral triangles
+// $triangle-size - Used to set border-size. No default, set a px or em size.
+// $triangle-color - Used to set border-color which makes up triangle. No default
+// $triangle-direction - Used to determine which direction triangle points. Options: top, bottom, left, right
+@mixin css-triangle($triangle-size, $triangle-color, $triangle-direction) {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  border: inset $triangle-size;
+  @if ($triangle-direction == top) {
+    border-color: $triangle-color transparent transparent transparent;
+    border-top-style: solid;
+  }
+  @if ($triangle-direction == bottom) {
+    border-color: transparent transparent $triangle-color transparent;
+    border-bottom-style: solid;
+  }
+  @if ($triangle-direction == left) {
+    border-color: transparent transparent transparent $triangle-color;
+    border-left-style: solid;
+  }
+  @if ($triangle-direction == right) {
+    border-color: transparent $triangle-color transparent transparent;
+    border-right-style: solid;
+  }
+}
+
+// We use this to do clear floats
+@mixin clearfix {
+  *zoom:1;
+  &:before, &:after { content: " "; display: table; }
+  &:after { clear: both; }
+}
+
+// @mixins
+//
+// We use this to add a glowing effect to block elements
+// $selector - Used for selector state. Default: focus, Options: hover, active, visited
+// $fade-time - Default: 300ms
+// $glowing-effect-color - Default: fade-out($primary-color, .25)
+@mixin block-glowing-effect($selector:focus, $fade-time:300ms, $glowing-effect-color:fade-out($primary-color, .25)) {
+  @if $experimental {
+    -webkit-transition: -webkit-box-shadow $fade-time, border-color $fade-time ease-in-out;
+    -moz-transition: -moz-box-shadow $fade-time, border-color $fade-time ease-in-out;
+  }
+  transition: box-shadow $fade-time, border-color $fade-time ease-in-out;
+
+  &:#{$selector} {
+    @if $experimental {
+      -webkit-box-shadow: 0 0 5px $glowing-effect-color;
+      -moz-box-shadow: 0 0 5px $glowing-effect-color;
+    }
+    box-shadow: 0 0 5px $glowing-effect-color;
+    border-color: $glowing-effect-color;
+  }
+}
+
+// We use these to control various global styles
+$body-bg: #fff !default;
+$body-font-color: #222 !default;
+$body-font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif !default;
+$body-font-weight: normal !default;
+$body-font-style: normal !default;
+
+// We use this to control font-smoothing
+$font-smoothing: antialiased !default;
+
+// We use these to control text direction settings
+$text-direction: ltr !default;
+
+// NOTE: No need to change this conditional statement, $text-direction variable controls it all.
+$default-float: left !default;
+$opposite-direction: right !default;
+@if $text-direction == ltr {
+  $default-float: left;
+  $opposite-direction: right;
+} @else {
+  $default-float: right;
+  $opposite-direction: left;
+}
+
+// We use these as default colors throughout
+$primary-color: #008CBA !default;
+$secondary-color: #e7e7e7 !default;
+$alert-color: #f04124 !default;
+$success-color: #43AC6A !default;
+$warning-color: #f08a24 !default;
+$info-color: #a0d3e8 !default;
+
+// We use these to make sure border radius matches unless we want it different.
+$global-radius: 3px !default;
+$global-rounded: 1000px !default;
+
+// We use these to control inset shadow shiny edges and depressions.
+$shiny-edge-size: 0 1px 0 !default;
+$shiny-edge-color: rgba(#fff, .5) !default;
+$shiny-edge-active-color: rgba(#000, .2) !default;
+
+// We use this to control whether or not CSS classes come through in the gem files.
+$include-html-classes: true !default;
+$include-print-styles: true !default;
+$include-html-global-classes: $include-html-classes !default;
+
+
+// Media Query Ranges
+$small-range: (0em, 40em);
+$medium-range: (40.063em, 64em);
+$large-range: (64.063em, 90em);
+$xlarge-range: (90.063em, 120em);
+$xxlarge-range: (120.063em);
+
+
+$screen: "only screen" !default;
+
+$landscape: "#{$screen} and (orientation: landscape)" !default;
+$portrait: "#{$screen} and (orientation: portrait)" !default;
+
+$small-up: $screen !default;
+$small-only: "#{$screen} and (max-width: #{upper-bound($small-range)})" !default;
+
+$medium-up: "#{$screen} and (min-width:#{lower-bound($medium-range)})" !default;
+$medium-only: "#{$screen} and (min-width:#{lower-bound($medium-range)}) and (max-width:#{upper-bound($medium-range)})" !default;
+
+$large-up: "#{$screen} and (min-width:#{lower-bound($large-range)})" !default;
+$large-only: "#{$screen} and (min-width:#{lower-bound($large-range)}) and (max-width:#{upper-bound($large-range)})" !default;
+
+$xlarge-up: "#{$screen} and (min-width:#{lower-bound($xlarge-range)})" !default;
+$xlarge-only: "#{$screen} and (min-width:#{lower-bound($xlarge-range)}) and (max-width:#{upper-bound($xlarge-range)})" !default;
+
+$xxlarge-up: "#{$screen} and (min-width:#{lower-bound($xxlarge-range)})" !default;
+$xxlarge-only: "#{$screen} and (min-width:#{lower-bound($xxlarge-range)}) and (max-width:#{upper-bound($xxlarge-range)})" !default;
+
+// Legacy
+$small: $medium-up;
+$medium: $medium-up;
+$large: $large-up;
+
+
+//We use this as cursors values for enabling the option of having custom cursors in the whole site's stylesheet
+$cursor-crosshair-value: crosshair !default;
+$cursor-default-value: default !default;
+$cursor-pointer-value: pointer !default;
+$cursor-help-value: help !default;
+$cursor-text-value: text !default;
+
+
+@include exports("global") {
+  @if $include-open-sans {
+    @import url("//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700");
+  }
+  // Used to provide media query values for javascript components.
+  // Forward slash placed around everything to convince PhantomJS to read the value.
+  meta.foundation-mq-small {
+    font-family: "/" + unquote($small-only) + "/";
+    width: lower-bound($small-range);
+  }
+
+  meta.foundation-mq-medium {
+    font-family: "/" + unquote($medium-only) + "/";
+    width: lower-bound($medium-range);
+  }
+
+  meta.foundation-mq-large {
+    font-family: "/" + unquote($large-up) + "/";
+    width: lower-bound($large-range);
+  }
+
+  meta.foundation-mq-xlarge {
+    font-family: "/" + unquote($xlarge-up) + "/";
+    width: lower-bound($xlarge-range);
+  }
+
+  meta.foundation-mq-xxlarge {
+    font-family: "/" + unquote($xxlarge-up) + "/";
+    width: lower-bound($xxlarge-range);
+  }
+
+  @if $include-html-global-classes {
+
+    // Set box-sizing globally to handle padding and border widths
+    *,
+    *:before,
+    *:after {
+      @include box-sizing(border-box);
+    }
+
+    html,
+    body { font-size: $base-font-size; }
+
+    // Default body styles
+    body {
+      background: $body-bg;
+      color: $body-font-color;
+      padding: 0;
+      margin: 0;
+      font-family: $body-font-family;
+      font-weight: $body-font-weight;
+      font-style: $body-font-style;
+      line-height: 1; // Set to $base-line-height to take on browser default of 150%
+      position: relative;
+      cursor: $cursor-default-value;
+    }
+
+  a:hover { cursor: $cursor-pointer-value; }
+
+    // Grid Defaults to get images and embeds to work properly
+    img,
+    object,
+    embed { max-width: 100%; height: auto; }
+
+    object,
+    embed { height: 100%; }
+    img { -ms-interpolation-mode: bicubic; }
+
+    #map_canvas,
+    .map_canvas {
+      img,
+      embed,
+      object { max-width: none !important;
+      }
+    }
+
+    // Miscellaneous useful HTML classes
+    .left   { float: left !important; }
+    .right  { float: right !important; }
+    .clearfix     { @include clearfix; }
+    .text-left    { text-align: left !important; }
+    .text-right   { text-align: right !important; }
+    .text-center  { text-align: center !important; }
+    .text-justify { text-align: justify !important; }
+    .hide         { display: none; }
+
+    // Font smoothing
+    // Antialiased font smoothing works best for light text on a dark background.
+    // Apply to single elements instead of globally to body.
+    // Note this only applies to webkit-based desktop browsers on the Mac.
+    .antialiased { -webkit-font-smoothing: antialiased; }
+
+    // Get rid of gap under images by making them display: inline-block; by default
+    img {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    //
+    // Global resets for forms
+    //
+
+    // Make sure textarea takes on height automatically
+    textarea { height: auto; min-height: 50px; }
+
+    // Make select elements 100% width by default
+    select { width: 100%; }
+  }
+}:
+@linei:@options{ :@has_childrenT:@children[`o:Sass::Tree::ImportNode;0;i;@:@imported_file0;
+[ :@imported_filename"../functionso:Sass::Tree::CommentNode
+;i;@;
+[ :
+@type:silent:@value["%/*
+ * Foundation Variables
+ * */o:Sass::Tree::VariableNode;i:@guarded"!default;@:
+@name"experimental:
+@expro:Sass::Script::Bool;i;@;T;
+[ o;
+;i;@;
+[ ;;;["›/* The default font-size is set to 100% of the browser style sheet (usually 16px)
+ * for compatibility with brower-based text zoom or user-set defaults. */o;
+;i;@;
+[ ;;;["/* Since the typical default browser font-size is 16px, that makes the calculation for grid size.
+ * If you want your base font-size to be different and not have it affect the grid breakpoints,
+ * set $rem-base to $base-font-size and make sure $base-font-size is a px value. */o;;i;"!default;@;"base-font-size;o:Sass::Script::Number;i;@:@denominator_units[ :@numerator_units["%:@original"	100%;ii;
+[ o;
+;i;@;
+[ ;;;["B/* $base-line-height is 24px while $base-font-size is 16px */o;;i;"!default;@;"base-line-height;o;;i;@;[ ;["%;"	150%;i–;
+[ o;
+;i;@;
+[ ;;;["N/* This is the default html and body font-size for the base rem value. */o;;i;"!default;@;"rem-base;o;;i;@;[ ;["px;"	16px;i;
+[ o;
+;i;@;
+[ ;;;["/* Use Open Sans font */o;;i;"!default;@;"include-open-sans;o;;i;@;T;
+[ o;
+;i;@;
+[ ;;;[")/*
+ * Global Foundation Mixins
+ * */o;
+;i#;@;
+[ ;;;["j/* @mixins
+ *
+ * We use this to control border radius.
+ * $radius - Default: $global-radius || 4px */o:Sass::Tree::MixinDefNode;i';@;"radius;	T;
+[u:Sass::Tree::IfNodeó[o:Sass::Script::Variable	:
+@linei(:@options{ :
+@name"radius:@underscored_name"radius0[u:Sass::Tree::IfNodeø[o:Sass::Script::Variable	:
+@linei):@options{ :
+@name"experimental:@underscored_name"experimental0[o:Sass::Tree::PropNode;i*;@;["-webkit-border-radius:@prop_syntax:new:@children[ :
+@tabsi :@valueo; 	;i*;@;"radius;	"radiuso:Sass::Tree::PropNode;i,;@;["border-radius:@prop_syntax:new:@children[ :
+@tabsi :@valueo; 	;i,;@;"radius;	"radius:@splat0:
+@args[[o:Sass::Script::Variable;@;"radius:@underscored_name"radiuso;	;i';@;"global-radius; "global_radiuso;
+;i0;@;
+[ ;;;["|/* @mixins
+ *
+ * We use this to create equal side border radius on elements.
+ * $side - Options: left, right, top, bottom */o;;i4;@;"side-radius;	T;
+[u;õ[o:Sass::Script::Operation
+:
+@linei5:@operand1o:Sass::Script::Variable	;i5:@options{ :
+@name"	side:@underscored_name"	side;	@:@operator:eq:@operand2o:Sass::Script::String	;i5;	@:
+@type:identifier:@value"	leftu:Sass::Tree::IfNodeú[o:Sass::Script::Operation
+:
+@linei?:@operand1o:Sass::Script::Variable	;i?:@options{ :
+@name"	side:@underscored_name"	side;	@:@operator:eq:@operand2o:Sass::Script::String	;i?;	@:
+@type:identifier:@value"
+rightu:Sass::Tree::IfNodeø[o:Sass::Script::Operation
+:
+@lineiI:@operand1o:Sass::Script::Variable	;iI:@options{ :
+@name"	side:@underscored_name"	side;	@:@operator:eq:@operand2o:Sass::Script::String	;iI;	@:
+@type:identifier:@value"topu:Sass::Tree::IfNode[o:Sass::Script::Operation
+:
+@lineiS:@operand1o:Sass::Script::Variable	;iS:@options{ :
+@name"	side:@underscored_name"	side;	@:@operator:eq:@operand2o:Sass::Script::String	;iS;	@:
+@type:identifier:@value"bottom0[u:Sass::Tree::IfNode![o:Sass::Script::Variable	:
+@lineiT:@options{ :
+@name"experimental:@underscored_name"experimental0[	o:Sass::Tree::PropNode;iU;@;["#-moz-border-radius-bottomright:@prop_syntax:new:@children[ :
+@tabsi :@valueo; 	;iU;@;"radius;	"radiuso;
+;iV;@;[""-moz-border-radius-bottomleft;;;[ ;i ;o; 	;iV;@;"radius;	"radiuso;
+;iW;@;["'-webkit-border-bottom-right-radius;;;[ ;i ;o; 	;iW;@;"radius;	"radiuso;
+;iX;@;["&-webkit-border-bottom-left-radius;;;[ ;i ;o; 	;iX;@;"radius;	"radiuso:Sass::Tree::PropNode;iZ;	@;
+["border-bottom-right-radius:@prop_syntax:new:@children[ :
+@tabsi ;o;	;iZ;	@;
+"radius;"radiuso;;i[;	@;
+["border-bottom-left-radius;;;[ ;i ;o;	;i[;	@;
+"radius;"radius[u;[o:Sass::Script::Variable	:
+@lineiJ:@options{ :
+@name"experimental:@underscored_name"experimental0[	o:Sass::Tree::PropNode;iK;@;[" -moz-border-radius-topright:@prop_syntax:new:@children[ :
+@tabsi :@valueo; 	;iK;@;"radius;	"radiuso;
+;iL;@;["-moz-border-radius-topleft;;;[ ;i ;o; 	;iL;@;"radius;	"radiuso;
+;iM;@;["$-webkit-border-top-right-radius;;;[ ;i ;o; 	;iM;@;"radius;	"radiuso;
+;iN;@;["#-webkit-border-top-left-radius;;;[ ;i ;o; 	;iN;@;"radius;	"radiuso:Sass::Tree::PropNode;iP;	@;
+["border-top-right-radius:@prop_syntax:new:@children[ :
+@tabsi ;o;	;iP;	@;
+"radius;"radiuso;;iQ;	@;
+["border-top-left-radius;;;[ ;i ;o;	;iQ;	@;
+"radius;"radius[u;[o:Sass::Script::Variable	:
+@linei@:@options{ :
+@name"experimental:@underscored_name"experimental0[	o:Sass::Tree::PropNode;iA;@;[" -moz-border-radius-topright:@prop_syntax:new:@children[ :
+@tabsi :@valueo; 	;iA;@;"radius;	"radiuso;
+;iB;@;["#-moz-border-radius-bottomright;;;[ ;i ;o; 	;iB;@;"radius;	"radiuso;
+;iC;@;["$-webkit-border-top-right-radius;;;[ ;i ;o; 	;iC;@;"radius;	"radiuso;
+;iD;@;["'-webkit-border-bottom-right-radius;;;[ ;i ;o; 	;iD;@;"radius;	"radiuso:Sass::Tree::PropNode;iF;	@;
+["border-top-right-radius:@prop_syntax:new:@children[ :
+@tabsi ;o;	;iF;	@;
+"radius;"radiuso;;iG;	@;
+["border-bottom-right-radius;;;[ ;i ;o;	;iG;	@;
+"radius;"radius[u;[o:Sass::Script::Variable	:
+@linei6:@options{ :
+@name"experimental:@underscored_name"experimental0[	o:Sass::Tree::PropNode;i7;@;[""-moz-border-radius-bottomleft:@prop_syntax:new:@children[ :
+@tabsi :@valueo; 	;i7;@;"radius;	"radiuso;
+;i8;@;["-moz-border-radius-topleft;;;[ ;i ;o; 	;i8;@;"radius;	"radiuso;
+;i9;@;["&-webkit-border-bottom-left-radius;;;[ ;i ;o; 	;i9;@;"radius;	"radiuso;
+;i:;@;["#-webkit-border-top-left-radius;;;[ ;i ;o; 	;i:;@;"radius;	"radiuso:Sass::Tree::PropNode;i<;	@;
+["border-bottom-left-radius:@prop_syntax:new:@children[ :
+@tabsi ;o;	;i<;	@;
+"radius;"radiuso;;i=;	@;
+["border-top-left-radius;;;[ ;i ;o;	;i=;	@;
+"radius;"radius;0;[[o;;@;"	side; "	side0[o;;@;"radius; "radiuso;	;i4;@;"global-radius; "global_radiuso;
+;i_;@;
+[ ;;;["~/* @mixins
+ *
+ * We can control whether or not we have inset shadows edges.
+ * $active - Default: true, Options: false */o;;ic;@;"inset-shadow;	T;
+[u;¬[o:Sass::Script::Variable	:
+@lineid:@options{ :
+@name"experimental:@underscored_name"experimental0[o:Sass::Tree::PropNode;ie;@;["-webkit-box-shadow:@prop_syntax:new:@children[ :
+@tabsi :@valueo:Sass::Script::List	:@separator:
+space;ie;@;[o; 	;ie;@;"shiny-edge-size;	"shiny_edge_sizeo; 	;ie;@;"shiny-edge-color;	"shiny_edge_coloro:Sass::Script::String	;ie;@:
+@type:identifier;"
+inseto:Sass::Tree::PropNode;ig;@;["box-shadow:@prop_syntax:new;
+[ :
+@tabsi ;o:Sass::Script::List	:@separator:
+space;ig;@;[o;	;ig;@;"shiny-edge-size; "shiny_edge_sizeo;	;ig;@;"shiny-edge-color; "shiny_edge_coloro:Sass::Script::String	;ig;@;:identifier;"
+insetu;ã[o:Sass::Script::Variable	:
+@lineii:@options{ :
+@name"active:@underscored_name"active0[o:Sass::Tree::RuleNode:
+@rule["&:active;ii;@:@parsed_ruleso:"Sass::Selector::CommaSequence:@filename" ;ii:@members[o:Sass::Selector::Sequence;[o:#Sass::Selector::SimpleSequence
+;@;ii;[o:Sass::Selector::Parent;@;iio:Sass::Selector::Pseudo
+;@;ii:	@arg0;["active:
+@type:
+class:@sourceso:Set:
+@hash{ :@subject0:@has_childrenT:@children[u:Sass::Tree::IfNodeº[o:Sass::Script::Variable	:
+@lineij:@options{ :
+@name"experimental:@underscored_name"experimental0[o:Sass::Tree::PropNode;ik;@;["-webkit-box-shadow:@prop_syntax:new:@children[ :
+@tabsi :@valueo:Sass::Script::List	:@separator:
+space;ik;@;[o; 	;ik;@;"shiny-edge-size;	"shiny_edge_sizeo; 	;ik;@;"shiny-edge-active-color;	"shiny_edge_active_coloro:Sass::Script::String	;ik;@:
+@type:identifier;"
+inseto:Sass::Tree::PropNode;im;@;["box-shadow:@prop_syntax:new;[ :
+@tabsi :@valueo:Sass::Script::List	:@separator:
+space;im;@;"[o; 	;im;@;"shiny-edge-size;	"shiny_edge_sizeo; 	;im;@;"shiny-edge-active-color;	"shiny_edge_active_coloro:Sass::Script::String	;im;@;:identifier;""
+inset;!i ;0;[[o;;@;"active; "activeo;;ic;@;To;
+;ip;@;
+[ ;;;[")/* @mixins
+ *
+ * We use this to add transitions to elements
+ * $property - Default: all, Options: http://www.w3.org/TR/css3-transitions/#animatable-properties
+ * $speed - Default: 300ms
+ * $ease - Default:ease-out, Options: http://css-tricks.com/almanac/properties/t/transition-timing-function/ */o;;iv;@;"single-transition;	T;
+[u;	[o:Sass::Script::Variable	:
+@lineiw:@options{ :
+@name"experimental:@underscored_name"experimental0[o:Sass::Tree::PropNode;ix;@;["-webkit-transition:@prop_syntax:new:@children[ :
+@tabsi :@valueo:Sass::Script::List	:@separator:
+space;ix;@;[o; 	;ix;@;"property;	"propertyo; 	;ix;@;"
+speed;	"
+speedo; 	;ix;@;"	ease;	"	easeo;
+;iy;@;["-moz-transition;;;[ ;i ;o;	;;;iy;@;[o; 	;iy;@;"property;	"propertyo; 	;iy;@;"
+speed;	"
+speedo; 	;iy;@;"	ease;	"	easeo;!;i{;@;["transition;";#;
+[ ;$i ;o;%	;&;';i{;@;[o;	;i{;@;"property; "propertyo;	;i{;@;"
+speed; "
+speedo;	;i{;@;"	ease; "	ease;0;[[o;;@;"property; "propertyo;(	;iv;@;;);"all[o;;@;"
+speed; "
+speedo;;iv;@;[ ;["ms;"
+300ms;i,[o;;@;"	ease; "	easeo;(	;iv;@;;);"ease-outo;
+;i~;@;
+[ ;;;["N/* @mixins
+ *
+ * We use this to add box-sizing across browser prefixes */o;;i|;@;"box-sizing;	T;
+[u;A[o:Sass::Script::Variable	:
+@linei}:@options{ :
+@name"experimental:@underscored_name"experimental0[o:Sass::Tree::PropNode;i~;@;["-moz-box-sizing:@prop_syntax:new:@children[ :
+@tabsi :@valueo; 	;i~;@;"	type;	"	typeo;
+;i;@;["-webkit-box-sizing;;;[ ;i ;o; 	;i;@;"	type;	"	typeo;!;i;@;["box-sizing;";#;
+[ ;$i ;o;	;i;@;"	type; "	type;0;[[o;;@;"	type; "	typeo;(	;i|;@;;);"border-boxo;
+;i„;@;
+[ ;;;["M/* @mixins
+ *
+ * We use this to create equilateral triangles
+ * $triangle-size - Used to set border-size. No default, set a px or em size.
+ * $triangle-color - Used to set border-color which makes up triangle. No default
+ * $triangle-direction - Used to determine which direction triangle points. Options: top, bottom, left, right */o;;iŠ;@;"css-triangle;	T;
+[o;!;i‹;@;["content;";#;
+[ ;$i ;o;(;@;;);"""o;!;iŒ;@;["display;";#;
+[ ;$i ;o;(;@;;);"
+blocko;!;i;@;["
+width;";#;
+[ ;$i ;o;(;@;;);"0o;!;iŽ;@;["height;";#;
+[ ;$i ;o;(;@;;);"0o;!;i;@;["border;";#;
+[ ;$i ;o;%	;&;';i;@;[o;(	;i;@;;);"
+inseto;	;i;@;"triangle-size; "triangle_sizeu;n[o:Sass::Script::Operation
+:
+@linei:@operand1o:Sass::Script::Variable	;i:@options{ :
+@name"triangle-direction:@underscored_name"triangle_direction;	@:@operator:eq:@operand2o:Sass::Script::String	;i;	@:
+@type:identifier:@value"top0[o:Sass::Tree::PropNode;i‘;	@;
+["border-color:@prop_syntax:new:@children[ :
+@tabsi ;o:Sass::Script::List	:@separator:
+space;i‘;	@;[	o;	;i‘;	@;
+"triangle-color;"triangle_coloro;	;i‘;	@;;;"transparento;	;i‘;	@;;;"transparento;	;i‘;	@;;;"transparento;;i’;	@;
+["border-top-style;;;[ ;i ;o;;	@;;;"
+solidu;t[o:Sass::Script::Operation
+:
+@linei”:@operand1o:Sass::Script::Variable	;i”:@options{ :
+@name"triangle-direction:@underscored_name"triangle_direction;	@:@operator:eq:@operand2o:Sass::Script::String	;i”;	@:
+@type:identifier:@value"bottom0[o:Sass::Tree::PropNode;i•;	@;
+["border-color:@prop_syntax:new:@children[ :
+@tabsi ;o:Sass::Script::List	:@separator:
+space;i•;	@;[	o;	;i•;	@;;;"transparento;	;i•;	@;;;"transparento;	;i•;	@;
+"triangle-color;"triangle_coloro;	;i•;	@;;;"transparento;;i–;	@;
+["border-bottom-style;;;[ ;i ;o;;	@;;;"
+solidu;p[o:Sass::Script::Operation
+:
+@linei˜:@operand1o:Sass::Script::Variable	;i˜:@options{ :
+@name"triangle-direction:@underscored_name"triangle_direction;	@:@operator:eq:@operand2o:Sass::Script::String	;i˜;	@:
+@type:identifier:@value"	left0[o:Sass::Tree::PropNode;i™;	@;
+["border-color:@prop_syntax:new:@children[ :
+@tabsi ;o:Sass::Script::List	:@separator:
+space;i™;	@;[	o;	;i™;	@;;;"transparento;	;i™;	@;;;"transparento;	;i™;	@;;;"transparento;	;i™;	@;
+"triangle-color;"triangle_coloro;;iš;	@;
+["border-left-style;;;[ ;i ;o;;	@;;;"
+solidu;r[o:Sass::Script::Operation
+:
+@lineiœ:@operand1o:Sass::Script::Variable	;iœ:@options{ :
+@name"triangle-direction:@underscored_name"triangle_direction;	@:@operator:eq:@operand2o:Sass::Script::String	;iœ;	@:
+@type:identifier:@value"
+right0[o:Sass::Tree::PropNode;i;	@;
+["border-color:@prop_syntax:new:@children[ :
+@tabsi ;o:Sass::Script::List	:@separator:
+space;i;	@;[	o;	;i;	@;;;"transparento;	;i;	@;
+"triangle-color;"triangle_coloro;	;i;	@;;;"transparento;	;i;	@;;;"transparento;;iž;	@;
+["border-right-style;;;[ ;i ;o;;	@;;;"
+solid;0;[[o;;@;"triangle-size; "triangle_size0[o;;@;"triangle-color; "triangle_color0[o;;@;"triangle-direction; "triangle_direction0o;
+;i¢;@;
+[ ;;;[")/* We use this to do clear floats */o;;i£;@;"clearfix;	T;
+[o;!;i¤;@;["
+*zoom;";#;
+[ ;$i ;o;(;@;;);"1o:Sass::Tree::RuleNode:
+@rule["&:before, &:after;i¥;@:@parsed_ruleso:"Sass::Selector::CommaSequence:@filename" ;i¥:@members[o:Sass::Selector::Sequence;/[o:#Sass::Selector::SimpleSequence
+;.@;i¥;/[o:Sass::Selector::Parent;.@;i¥o:Sass::Selector::Pseudo
+;.@;i¥:	@arg0;["before;:
+class:@sourceso:Set:
+@hash{ :@subject0o;0;/[o;1
+;.@;i¥;/[o;2;.@;i¥o;3
+;.@;i¥;40;["
+after;;5;6o;7;8{ ;90;	T;
+[o;!;i¥;@;["content;";#;
+[ ;$i ;o;(;@;;);"" "o;!;i¥;@;["display;";#;
+[ ;$i ;o;(;@;;);"
+table;$i o;*;+["&:after;i¦;@;,o;-;." ;i¦;/[o;0;/[o;1
+;.@?;i¦;/[o;2;.@?;i¦o;3
+;.@?;i¦;40;["
+after;;5;6o;7;8{ ;90;	T;
+[o;!;i¦;@;["
+clear;";#;
+[ ;$i ;o;(;@;;);"	both;$i ;0;[ o;
+;i©;@;
+[ ;;;["/* @mixins
+ *
+ * We use this to add a glowing effect to block elements
+ * $selector - Used for selector state. Default: focus, Options: hover, active, visited
+ * $fade-time - Default: 300ms
+ * $glowing-effect-color - Default: fade-out($primary-color, .25) */o;;i¯;@;"block-glowing-effect;	T;
+[u;7[o:Sass::Script::Variable	:
+@linei°:@options{ :
+@name"experimental:@underscored_name"experimental0[o:Sass::Tree::PropNode;i±;@;["-webkit-transition:@prop_syntax:new:@children[ :
+@tabsi :@valueo:Sass::Script::List	:@separator:
+comma;i±;@;[o;	;:
+space;i±;@;[o:Sass::Script::String	;i±;@:
+@type:identifier;"-webkit-box-shadowo; 	;i±;@;"fade-time;	"fade_timeo;	;;;i±;@;[o;	;i±;@;;;"border-coloro; 	;i±;@;"fade-time;	"fade_timeo;	;i±;@;;;"ease-in-outo;
+;i²;@;["-moz-transition;;;[ ;i ;o;	;;;i²;@;[o;	;;;i²;@;[o;	;i²;@;;;"-moz-box-shadowo; 	;i²;@;"fade-time;	"fade_timeo;	;;;i²;@;[o;	;i²;@;;;"border-coloro; 	;i²;@;"fade-time;	"fade_timeo;	;i²;@;;;"ease-in-outo;!;i´;@;["transition;";#;
+[ ;$i ;o;%	;&:
+comma;i´;@;[o;%	;&;';i´;@;[o;(	;i´;@;;);"box-shadowo;	;i´;@;"fade-time; "fade_timeo;%	;&;';i´;@;[o;(	;i´;@;;);"border-coloro;	;i´;@;"fade-time; "fade_timeo;(	;i´;@;;);"ease-in-outo;*;+["&:o;	;i¶;@;"selector; "selector;i¶;@;	T;
+[u;Ë[o:Sass::Script::Variable	:
+@linei·:@options{ :
+@name"experimental:@underscored_name"experimental0[o:Sass::Tree::PropNode;i¸;@;["-webkit-box-shadow:@prop_syntax:new:@children[ :
+@tabsi :@valueo:Sass::Script::List	:@separator:
+space;i¸;@;[	o:Sass::Script::Number;i¸;@:@denominator_units[ :@numerator_units[ :@original"0;i o;;i¸;@;@;[ ;"0;i o;;i¸;@;[ ;["px;"5px;i
+o; 	;i¸;@;"glowing-effect-color;	"glowing_effect_coloro;
+;i¹;@;["-moz-box-shadow;;;[ ;i ;o;	;;;i¹;@;[	o;;i¹;@;@;[ ;"0;i o;;i¹;@;@;[ ;"0;i o;;i¹;@;[ ;["px;"5px;i
+o; 	;i¹;@;"glowing-effect-color;	"glowing_effect_coloro;!;i»;@;["box-shadow;";#;
+[ ;$i ;o;%	;&;';i»;@;[	o;;i»;@;[ ;[ ;"0;i o;;i»;@;@€;[ ;"0;i o;;i»;@;[ ;["px;"5px;i
+o;	;i»;@;"glowing-effect-color; "glowing_effect_coloro;!;i¼;@;["border-color;";#;
+[ ;$i ;o;	;i¼;@;"glowing-effect-color; "glowing_effect_color;$i ;0;[[o;;@;"selector; "selectoro;(	;i¯;@;;);"
+focus[o;;@;"fade-time; "fade_timeo;;i¯;@;[ ;["ms;"
+300ms;i,[o;;@;"glowing-effect-color; "glowing_effect_coloro:Sass::Script::Funcall:@keywords{ ;i¯;@;"fade-out;0;[o;	;i¯;@;"primary-color; "primary_coloro;;i¯;@;@€;[ ;"	0.25;f	0.25o;
+;iÀ;@;
+[ ;;;["8/* We use these to control various global styles */o;;iÁ;"!default;@;"body-bg;o:Sass::Script::Color	;iÁ;@:@attrs{	:rediÿ:
+alphai:
+greeniÿ:	blueiÿ;0;
+[ o;;iÂ;"!default;@;"body-font-color;o;=	;iÂ;@;>{	;?i';@i;Ai';Bi';0;
+[ o;;iÃ;"!default;@;"body-font-family;o;%	;&;:;iÃ;@;[
+o;(	;iÃ;@;:string;"Helvetica Neueo;(	;iÃ;@;;C;"Helveticao;(	;iÃ;@;;);"Helveticao;(	;iÃ;@;;);"
+Arialo;(	;iÃ;@;;);"sans-serif;
+[ o;;iÄ;"!default;@;"body-font-weight;o;(	;iÄ;@;;);"normal;
+[ o;;iÅ;"!default;@;"body-font-style;o;(	;iÅ;@;;);"normal;
+[ o;
+;iÇ;@;
+[ ;;;["0/* We use this to control font-smoothing */o;;iÈ;"!default;@;"font-smoothing;o;(	;iÈ;@;;);"antialiased;
+[ o;
+;iÊ;@;
+[ ;;;[":/* We use these to control text direction settings */o;;iË;"!default;@;"text-direction;o;(	;iË;@;;);"ltr;
+[ o;
+;iÍ;@;
+[ ;;;["h/* NOTE: No need to change this conditional statement, $text-direction variable controls it all. */o;;iÎ;"!default;@;"default-float;o;(	;iÎ;@;;);"	left;
+[ o;;iÏ;"!default;@;"opposite-direction;o;(	;iÏ;@;;);"
+right;
+[ u;¼[o:Sass::Script::Operation
+:
+@lineiÐ:@operand1o:Sass::Script::Variable	;iÐ:@options{ :
+@name"text-direction:@underscored_name"text_direction;	@:@operator:eq:@operand2o:Sass::Script::String	;iÐ;	@:
+@type:identifier:@value"ltru:Sass::Tree::IfNode÷[00[o:Sass::Tree::VariableNode:
+@lineiÔ:@guarded0:@options{ :
+@name"default-float:
+@expro:Sass::Script::String	;iÔ;@:
+@type:identifier:@value"
+right:@children[ o; ;iÕ;0;@;	"opposite-direction;
+o;	;iÕ;@;;;"	left;[ [o:Sass::Tree::VariableNode;iÑ:@guarded0;	@;
+"default-float:
+@expro;	;iÑ;	@;;;"	left:@children[ o;;iÒ;0;	@;
+"opposite-direction;o;	;iÒ;	@;;;"
+right;[ o;
+;iØ;@;
+[ ;;;["4/* We use these as default colors throughout */o;;iÙ;"!default;@;"primary-color;o;=	;iÙ;@;>{	;?i ;@i;AiŒ;Biº;0;
+[ o;;iÚ;"!default;@;"secondary-color;o;=	;iÚ;@;>{	;?iç;@i;Aiç;Biç;0;
+[ o;;iÛ;"!default;@;"alert-color;o;=	;iÛ;@;>{	;?ið;@i;AiF;Bi);0;
+[ o;;iÜ;"!default;@;"success-color;o;=	;iÜ;@;>{	;?iH;@i;Ai¬;Bio;0;
+[ o;;iÝ;"!default;@;"warning-color;o;=	;iÝ;@;>{	;?ið;@i;AiŠ;Bi);0;
+[ o;;iÞ;"!default;@;"info-color;o;=	;iÞ;@;>{	;?i ;@i;AiÓ;Biè;0;
+[ o;
+;ià;@;
+[ ;;;["W/* We use these to make sure border radius matches unless we want it different. */o;;iá;"!default;@;"global-radius;o;;iá;@;[ ;["px;"3px;i;
+[ o;;iâ;"!default;@;"global-rounded;o;;iâ;@;[ ;["px;"1000px;iè;
+[ o;
+;iä;@;
+[ ;;;["L/* We use these to control inset shadow shiny edges and depressions. */o;;iå;"!default;@;"shiny-edge-size;o;%	;&;';iå;@;[o;;iå;@;@€;[ ;"0;i o;;iå;@;[ ;["px;"1px;io;;iå;@;@€;[ ;"0;i ;
+[ o;;iæ;"!default;@;"shiny-edge-color;o;;;<{ ;iæ;@;"	rgba;0;[o;=	;iæ;@;>{	;?iÿ;@i;Aiÿ;Biÿ;0o;;iæ;@;@€;[ ;"0.5;f0.5;
+[ o;;iç;"!default;@;"shiny-edge-active-color;o;;;<{ ;iç;@;"	rgba;0;[o;=	;iç;@;>{	;?i ;@i;Ai ;Bi ;0o;;iç;@;@€;[ ;"0.2;f0.20000000000000001 ™š;
+[ o;
+;ié;@;
+[ ;;;["[/* We use this to control whether or not CSS classes come through in the gem files. */o;;iê;"!default;@;"include-html-classes;o;;iê;@;T;
+[ o;;ië;"!default;@;"include-print-styles;o;;ië;@;T;
+[ o;;iì;"!default;@;" include-html-global-classes;o;	;iì;@;"include-html-classes; "include_html_classes;
+[ o;
+;iï;@;
+[ ;;;["/* Media Query Ranges */o;;ið;0;@;"small-range;o;%	;&;:;ið;@;[o;
+;ið;@;[ ;["em;i o;;ið;@;[ ;["em;"	40em;i-;
+[ o;;iñ;0;@;"medium-range;o;%	;&;:;iñ;@;[o;
+;iñ;@;[ ;["em;f40.063000000000002 Òòo;;iñ;@;[ ;["em;"	64em;iE;
+[ o;;iò;0;@;"large-range;o;%	;&;:;iò;@;[o;
+;iò;@;[ ;["em;f64.063000000000002 éyo;;iò;@;[ ;["em;"	90em;i_;
+[ o;;ió;0;@;"xlarge-range;o;%	;&;:;ió;@;[o;
+;ió;@;[ ;["em;f90.063000000000002 éyo;;ió;@;[ ;["em;"
+120em;i};
+[ o;;iô;0;@;"xxlarge-range;o;
+;iô;@;[ ;["em;f120.063 éy;
+[ o;;i÷;"!default;@;"screen;o;(	;i÷;@;;C;"only screen;
+[ o;;iù;"!default;@;"landscape;o:&Sass::Script::StringInterpolation
+:	@mido;	;iù;@;"screen; "screen;iù;@:@beforeo;(	;iù;@;;C;" :@aftero;(	;iù;@;;C;"" and (orientation: landscape);
+[ o;;iú;"!default;@;"portrait;o;D
+;Eo;	;iú;@;"screen; "screen;iú;@;Fo;(	;iú;@;;C;" ;Go;(	;iú;@;;C;"! and (orientation: portrait);
+[ o;;iü;"!default;@;"small-up;o;	;iü;@;"screen; "screen;
+[ o;;iý;"!default;@;"small-only;o;D
+;Eo;	;iý;@;"screen; "screen;iý;@;Fo;(	;iý;@;;C;" ;Go;D
+;Eo;;;<{ ;iý;@;"upper-bound;0;[o;	;iý;@;"small-range; "small_range;iý;@;Fo;(	;iý;@;;C;" and (max-width: ;Go;(	;iý;@;;C;");
+[ o;;iÿ;"!default;@;"medium-up;o;D
+;Eo;	;iÿ;@;"screen; "screen;iÿ;@;Fo;(	;iÿ;@;;C;" ;Go;D
+;Eo;;;<{ ;iÿ;@;"lower-bound;0;[o;	;iÿ;@;"medium-range; "medium_range;iÿ;@;Fo;(	;iÿ;@;;C;" and (min-width:;Go;(	;iÿ;@;;C;");
+[ o;;i ;"!default;@;"medium-only;o;D
+;Eo;	;i ;@;"screen; "screen;i ;@;Fo;(	;i ;@;;C;" ;Go;D
+;Eo;;;<{ ;i ;@;"lower-bound;0;[o;	;i ;@;"medium-range; "medium_range;i ;@;Fo;(	;i ;@;;C;" and (min-width:;Go;D
+;Eo;;;<{ ;i ;@;"upper-bound;0;[o;	;i ;@;"medium-range; "medium_range;i ;@;Fo;(	;i ;@;;C;") and (max-width:;Go;(	;i ;@;;C;");
+[ o;;i;"!default;@;"large-up;o;D
+;Eo;	;i;@;"screen; "screen;i;@;Fo;(	;i;@;;C;" ;Go;D
+;Eo;;;<{ ;i;@;"lower-bound;0;[o;	;i;@;"large-range; "large_range;i;@;Fo;(	;i;@;;C;" and (min-width:;Go;(	;i;@;;C;");
+[ o;;i;"!default;@;"large-only;o;D
+;Eo;	;i;@;"screen; "screen;i;@;Fo;(	;i;@;;C;" ;Go;D
+;Eo;;;<{ ;i;@;"lower-bound;0;[o;	;i;@;"large-range; "large_range;i;@;Fo;(	;i;@;;C;" and (min-width:;Go;D
+;Eo;;;<{ ;i;@;"upper-bound;0;[o;	;i;@;"large-range; "large_range;i;@;Fo;(	;i;@;;C;") and (max-width:;Go;(	;i;@;;C;");
+[ o;;i;"!default;@;"xlarge-up;o;D
+;Eo;	;i;@;"screen; "screen;i;@;Fo;(	;i;@;;C;" ;Go;D
+;Eo;;;<{ ;i;@;"lower-bound;0;[o;	;i;@;"xlarge-range; "xlarge_range;i;@;Fo;(	;i;@;;C;" and (min-width:;Go;(	;i;@;;C;");
+[ o;;i;"!default;@;"xlarge-only;o;D
+;Eo;	;i;@;"screen; "screen;i;@;Fo;(	;i;@;;C;" ;Go;D
+;Eo;;;<{ ;i;@;"lower-bound;0;[o;	;i;@;"xlarge-range; "xlarge_range;i;@;Fo;(	;i;@;;C;" and (min-width:;Go;D
+;Eo;;;<{ ;i;@;"upper-bound;0;[o;	;i;@;"xlarge-range; "xlarge_range;i;@;Fo;(	;i;@;;C;") and (max-width:;Go;(	;i;@;;C;");
+[ o;;i;"!default;@;"xxlarge-up;o;D
+;Eo;	;i;@;"screen; "screen;i;@;Fo;(	;i;@;;C;" ;Go;D
+;Eo;;;<{ ;i;@;"lower-bound;0;[o;	;i;@;"xxlarge-range; "xxlarge_range;i;@;Fo;(	;i;@;;C;" and (min-width:;Go;(	;i;@;;C;");
+[ o;;i	;"!default;@;"xxlarge-only;o;D
+;Eo;	;i	;@;"screen; "screen;i	;@;Fo;(	;i	;@;;C;" ;Go;D
+;Eo;;;<{ ;i	;@;"lower-bound;0;[o;	;i	;@;"xxlarge-range; "xxlarge_range;i	;@;Fo;(	;i	;@;;C;" and (min-width:;Go;D
+;Eo;;;<{ ;i	;@;"upper-bound;0;[o;	;i	;@;"xxlarge-range; "xxlarge_range;i	;@;Fo;(	;i	;@;;C;") and (max-width:;Go;(	;i	;@;;C;");
+[ o;
+;i;@;
+[ ;;;["/* Legacy */o;;i;0;@;"
+small;o;	;i;@;"medium-up; "medium_up;
+[ o;;i;0;@;"medium;o;	;i;@;"medium-up; "medium_up;
+[ o;;i;0;@;"
+large;o;	;i;@;"large-up; "large_up;
+[ o;
+;i;@;
+[ ;;;["w/*We use this as cursors values for enabling the option of having custom cursors in the whole site's stylesheet */o;;i;"!default;@;"cursor-crosshair-value;o;(	;i;@;;);"crosshair;
+[ o;;i;"!default;@;"cursor-default-value;o;(	;i;@;;);"default;
+[ o;;i;"!default;@;"cursor-pointer-value;o;(	;i;@;;);"pointer;
+[ o;;i;"!default;@;"cursor-help-value;o;(	;i;@;;);"	help;
+[ o;;i;"!default;@;"cursor-text-value;o;(	;i;@;;);"	text;
+[ o:Sass::Tree::MixinNode;<{ ;i;@;"exports;	T;
+[u;™[o:Sass::Script::Variable	:
+@linei:@options{ :
+@name"include-open-sans:@underscored_name"include_open_sans0[o:Sass::Tree::CssImportNode;i;@:	@urio:Sass::Script::Funcall:@keywords{ ;i;{ ;"url:@splat0:
+@args[o:Sass::Script::String	;i;@:
+@type:string:@value"Z//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700:@children[ ;" :@query[ o;
+;i;@;
+[ ;;;["–/* Used to provide media query values for javascript components.
+ * Forward slash placed around everything to convince PhantomJS to read the value. */o;*;+["meta.foundation-mq-small;i;@;,o;-;." ;i;/[o;0;/[o;1
+;.@(;i;/[o:Sass::Selector::Element	;.@(:@namespace0;i;["	metao:Sass::Selector::Class;.@(;i;["foundation-mq-small;6o;7;8{ ;90;	T;
+[o;!;i ;@;["font-family;";#;
+[ ;$i ;o:Sass::Script::Operation
+;i :@operand1o;L
+;i ;Mo;(	;i ;@;;C;"/;@:@operator:	plus:@operand2o;;;<{ ;i ;@;"unquote;0;[o;	;i ;@;"small-only; "small_only;@;N;O;Po;(	;i ;@;;C;"/o;!;i!;@;["
+width;";#;
+[ ;$i ;o;;;<{ ;i!;@;"lower-bound;0;[o;	;i!;@;"small-range; "small_range;$i o;*;+["meta.foundation-mq-medium;i$;@;,o;-;." ;i$;/[o;0;/[o;1
+;.@W;i$;/[o;I	;.@W;J0;i$;["	metao;K;.@W;i$;["foundation-mq-medium;6o;7;8{ ;90;	T;
+[o;!;i%;@;["font-family;";#;
+[ ;$i ;o;L
+;i%;Mo;L
+;i%;Mo;(	;i%;@;;C;"/;@;N;O;Po;;;<{ ;i%;@;"unquote;0;[o;	;i%;@;"medium-only; "medium_only;@;N;O;Po;(	;i%;@;;C;"/o;!;i&;@;["
+width;";#;
+[ ;$i ;o;;;<{ ;i&;@;"lower-bound;0;[o;	;i&;@;"medium-range; "medium_range;$i o;*;+["meta.foundation-mq-large;i);@;,o;-;." ;i);/[o;0;/[o;1
+;.@†;i);/[o;I	;.@†;J0;i);["	metao;K;.@†;i);["foundation-mq-large;6o;7;8{ ;90;	T;
+[o;!;i*;@;["font-family;";#;
+[ ;$i ;o;L
+;i*;Mo;L
+;i*;Mo;(	;i*;@;;C;"/;@;N;O;Po;;;<{ ;i*;@;"unquote;0;[o;	;i*;@;"large-up; "large_up;@;N;O;Po;(	;i*;@;;C;"/o;!;i+;@;["
+width;";#;
+[ ;$i ;o;;;<{ ;i+;@;"lower-bound;0;[o;	;i+;@;"large-range; "large_range;$i o;*;+["meta.foundation-mq-xlarge;i.;@;,o;-;." ;i.;/[o;0;/[o;1
+;.@µ;i.;/[o;I	;.@µ;J0;i.;["	metao;K;.@µ;i.;["foundation-mq-xlarge;6o;7;8{ ;90;	T;
+[o;!;i/;@;["font-family;";#;
+[ ;$i ;o;L
+;i/;Mo;L
+;i/;Mo;(	;i/;@;;C;"/;@;N;O;Po;;;<{ ;i/;@;"unquote;0;[o;	;i/;@;"xlarge-up; "xlarge_up;@;N;O;Po;(	;i/;@;;C;"/o;!;i0;@;["
+width;";#;
+[ ;$i ;o;;;<{ ;i0;@;"lower-bound;0;[o;	;i0;@;"xlarge-range; "xlarge_range;$i o;*;+["meta.foundation-mq-xxlarge;i3;@;,o;-;." ;i3;/[o;0;/[o;1
+;.@ä;i3;/[o;I	;.@ä;J0;i3;["	metao;K;.@ä;i3;["foundation-mq-xxlarge;6o;7;8{ ;90;	T;
+[o;!;i4;@;["font-family;";#;
+[ ;$i ;o;L
+;i4;Mo;L
+;i4;Mo;(	;i4;@;;C;"/;@;N;O;Po;;;<{ ;i4;@;"unquote;0;[o;	;i4;@;"xxlarge-up; "xxlarge_up;@;N;O;Po;(	;i4;@;;C;"/o;!;i5;@;["
+width;";#;
+[ ;$i ;o;;;<{ ;i5;@;"lower-bound;0;[o;	;i5;@;"xxlarge-range; "xxlarge_range;$i u;.[o:Sass::Script::Variable	:
+@linei8:@options{ :
+@name" include-html-global-classes:@underscored_name" include_html_global_classes0["o:Sass::Tree::CommentNode
+;i:;@:@children[ :
+@type:silent:@value["F/* Set box-sizing globally to handle padding and border widths */o:Sass::Tree::RuleNode:
+@rule["!*,
+    *:before,
+    *:after;i=;@:@parsed_ruleso:"Sass::Selector::CommaSequence:@filename" ;i=:@members[o:Sass::Selector::Sequence;[o:#Sass::Selector::SimpleSequence
+;@;i=;[o:Sass::Selector::Universal;@:@namespace0;i=:@sourceso:Set:
+@hash{ :@subject0o;;["
+o;
+;@;i=;[o;;@;0;i=o:Sass::Selector::Pseudo
+;@;i=:	@arg0;["before;:
+class;o;;{ ;0o;;["
+o;
+;@;i=;[o;;@;0;i=o;
+;@;i=;0;["
+after;;;o;;{ ;0:@has_childrenT;[o:Sass::Tree::MixinNode:@keywords{ ;i>;@;"box-sizing;[ :@splat0:
+@args[o:Sass::Script::String	;i>;@;:identifier;"border-box:
+@tabsi o;;["html,
+    body;iB;@;o;;" ;iB;[o;;[o;
+;@>;iB;[o:Sass::Selector::Element	;@>;0;iB;["	html;o;;{ ;0o;;["
+o;
+;@>;iB;[o;(	;@>;0;iB;["	body;o;;{ ;0; T;[o:Sass::Tree::PropNode;iB;@;["font-size:@prop_syntax:new;[ ;'i ;o; 	;iB;@;"base-font-size;	"base_font_size;'i o;
+
+;iD;@;[ ;;;["/* Default body styles */o;;["	body;iE;@;o;;" ;iE;[o;;[o;
+;@c;iE;[o;(	;@c;0;iE;["	body;o;;{ ;0; T;[o;);iF;@;["background;*;+;[ ;'i ;o; 	;iF;@;"body-bg;	"body_bgo;);iG;@;["
+color;*;+;[ ;'i ;o; 	;iG;@;"body-font-color;	"body_font_coloro;);iH;@;["padding;*;+;[ ;'i ;o;%;@;;&;"0o;);iI;@;["margin;*;+;[ ;'i ;o;%;@;;&;"0o;);iJ;@;["font-family;*;+;[ ;'i ;o; 	;iJ;@;"body-font-family;	"body_font_familyo;);iK;@;["font-weight;*;+;[ ;'i ;o; 	;iK;@;"body-font-weight;	"body_font_weighto;);iL;@;["font-style;*;+;[ ;'i ;o; 	;iL;@;"body-font-style;	"body_font_styleo;);iM;@;["line-height;*;+;[ ;'i ;o;%;@;;&;"1o;
+
+;iM;@;[ ;;;["F/* Set to $base-line-height to take on browser default of 150% */o;);iN;@;["position;*;+;[ ;'i ;o;%;@;;&;"relativeo;);iO;@;["cursor;*;+;[ ;'i ;o; 	;iO;@;"cursor-default-value;	"cursor_default_value;'i o;;["a:hover;iR;@;o;;" ;iR;[o;;[o;
+;@´;iR;[o;(	;@´;0;iR;["ao;
+;@´;iR;0;["
+hover;;;o;;{ ;0; T;[o;);iR;@;["cursor;*;+;[ ;'i ;o; 	;iR;@;"cursor-pointer-value;	"cursor_pointer_value;'i o;
+
+;iT;@;[ ;;;["B/* Grid Defaults to get images and embeds to work properly */o;;["img,
+    object,
+    embed;iW;@;o;;" ;iW;[o;;[o;
+;@Ò;iW;[o;(	;@Ò;0;iW;["img;o;;{ ;0o;;["
+o;
+;@Ò;iW;[o;(	;@Ò;0;iW;["object;o;;{ ;0o;;["
+o;
+;@Ò;iW;[o;(	;@Ò;0;iW;["
+embed;o;;{ ;0; T;[o;);iW;@;["max-width;*;+;[ ;'i ;o;%;@;;&;"	100%o;);iW;@;["height;*;+;[ ;'i ;o;%;@;;&;"	auto;'i o;;["object,
+    embed;iZ;@;o;;" ;iZ;[o;;[o;
+;@;iZ;[o;(	;@;0;iZ;["object;o;;{ ;0o;;["
+o;
+;@;iZ;[o;(	;@;0;iZ;["
+embed;o;;{ ;0; T;[o;);iZ;@;["height;*;+;[ ;'i ;o;%;@;;&;"	100%;'i o;;["img;i[;@;o;;" ;i[;[o;;[o;
+;@";i[;[o;(	;@";0;i[;["img;o;;{ ;0; T;[o;);i[;@;["-ms-interpolation-mode;*;+;[ ;'i ;o;%;@;;&;"bicubic;'i o;;["!#map_canvas,
+    .map_canvas;i^;@;o;;" ;i^;[o;;[o;
+;@8;i^;[o:Sass::Selector::Id;@8;i^;["map_canvas;o;;{ ;0o;;["
+o;
+;@8;i^;[o:Sass::Selector::Class;@8;i^;["map_canvas;o;;{ ;0; T;[o;;["#img,
+      embed,
+      object;ia;@;o;;" ;ia;[o;;[o;
+;@R;ia;[o;(	;@R;0;ia;["img;o;;{ ;0o;;["
+o;
+;@R;ia;[o;(	;@R;0;ia;["
+embed;o;;{ ;0o;;["
+o;
+;@R;ia;[o;(	;@R;0;ia;["object;o;;{ ;0; T;[o;);ia;@;["max-width;*;+;[ ;'i ;o;%;@;;&;"none !important;'i ;'i o;
+
+;ie;@;[ ;;;[",/* Miscellaneous useful HTML classes */o;;["
+.left;if;@;o;;" ;if;[o;;[o;
+;@€;if;[o;-;@€;if;["	left;o;;{ ;0; T;[o;);if;@;["
+float;*;+;[ ;'i ;o;%;@;;&;"left !important;'i o;;[".right;ig;@;o;;" ;ig;[o;;[o;
+;@–;ig;[o;-;@–;ig;["
+right;o;;{ ;0; T;[o;);ig;@;["
+float;*;+;[ ;'i ;o;%;@;;&;"right !important;'i o;;[".clearfix;ih;@;o;;" ;ih;[o;;[o;
+;@¬;ih;[o;-;@¬;ih;["clearfix;o;;{ ;0; T;[o;!;"{ ;ih;@;"clearfix;[ ;#0;$[ ;'i o;;[".text-left;ii;@;o;;" ;ii;[o;;[o;
+;@Á;ii;[o;-;@Á;ii;["text-left;o;;{ ;0; T;[o;);ii;@;["text-align;*;+;[ ;'i ;o;%;@;;&;"left !important;'i o;;[".text-right;ij;@;o;;" ;ij;[o;;[o;
+;@×;ij;[o;-;@×;ij;["text-right;o;;{ ;0; T;[o;);ij;@;["text-align;*;+;[ ;'i ;o;%;@;;&;"right !important;'i o;;[".text-center;ik;@;o;;" ;ik;[o;;[o;
+;@í;ik;[o;-;@í;ik;["text-center;o;;{ ;0; T;[o;);ik;@;["text-align;*;+;[ ;'i ;o;%;@;;&;"center !important;'i o;;[".text-justify;il;@;o;;" ;il;[o;;[o;
+;@;il;[o;-;@;il;["text-justify;o;;{ ;0; T;[o;);il;@;["text-align;*;+;[ ;'i ;o;%;@;;&;"justify !important;'i o;;["
+.hide;im;@;o;;" ;im;[o;;[o;
+;@;im;[o;-;@;im;["	hide;o;;{ ;0; T;[o;);im;@;["display;*;+;[ ;'i ;o;%;@;;&;"	none;'i o;
+
+;io;@;[ ;;;["â/* Font smoothing
+ * Antialiased font smoothing works best for light text on a dark background.
+ * Apply to single elements instead of globally to body.
+ * Note this only applies to webkit-based desktop browsers on the Mac. */o;;[".antialiased;is;@;o;;" ;is;[o;;[o;
+;@3;is;[o;-;@3;is;["antialiased;o;;{ ;0; T;[o;);is;@;["-webkit-font-smoothing;*;+;[ ;'i ;o;%;@;;&;"antialiased;'i o;
+
+;iu;@;[ ;;;["W/* Get rid of gap under images by making them display: inline-block; by default */o;;["img;iv;@;o;;" ;iv;[o;;[o;
+;@M;iv;[o;(	;@M;0;iv;["img;o;;{ ;0; T;[o;);iw;@;["display;*;+;[ ;'i ;o;%;@;;&;"inline-blocko;);ix;@;["vertical-align;*;+;[ ;'i ;o;%;@;;&;"middle;'i o;
+
+;i{;@;[ ;;;["(/*
+ * Global resets for forms
+ * */o;
+
+;i;@;[ ;;;[";/* Make sure textarea takes on height automatically */o;;["textarea;i€;@;o;;" ;i€;[o;;[o;
+;@q;i€;[o;(	;@q;0;i€;["textarea;o;;{ ;0; T;[o;);i€;@;["height;*;+;[ ;'i ;o;%;@;;&;"	autoo;);i€;@;["min-height;*;+;[ ;'i ;o;%;@;;&;"	50px;'i o;
+
+;i‚;@;[ ;;;["5/* Make select elements 100% width by default */o;;["select;iƒ;@;o;;" ;iƒ;[o;;[o;
+;@‘;iƒ;[o;(	;@‘;0;iƒ;["select;o;;{ ;0; T;[o;);iƒ;@;["
+width;*;+;[ ;'i ;o;%;@;;&;"	100%;'i ;0;[o;(	;i;@;;C;"global

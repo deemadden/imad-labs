@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="jQuery.transit" type="javaScript">
+    <properties>
+      <option name="frameworkName" value="jQuery" />
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/resources/js/lib/dev/jquery.transit.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/resources/js/lib/dev/jquery.transit.js" />
+      <root url="file://$PROJECT_DIR$/resources/js/lib/jquery.transit.min.js" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,18 @@
+<component name="libraryTable">
+  <library name="jQuery-2.0.3" type="javaScript">
+    <properties>
+      <option name="frameworkName" value="jQuery" />
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/resources/js/lib/dev/jquery.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/resources/js/lib/jquery-2.0.3.min.js" />
+      <root url="file://$PROJECT_DIR$/resources/js/lib/dev/jquery.js" />
+    </CLASSES>
+    <DOCUMENTATION>
+      <root url="http://api.jquery.com" />
+    </DOCUMENTATION>
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,11 @@
+<div>
+  <div class="scav-exit"><a href="#/">X</a></div>
+  <h2>Details:</h2>
+  <div><div class="scav-label">Level:</div><div class="scav-value">{{scav.level}}</div></div>
+  <div><div class="scav-label">Name:</div><div class="scav-value">{{scav.name}}</div></div>
+  <div><div class="scav-label">Description:</div><div class="scav-value">{{scav.description}}</div></div>
+  <div><div class="scav-label">Time Length:</div><div class="scav-value">{{scav.duration}}</div></div>
+  <ul>
+    <li ng-repeat="item in scavDetail.items"><scav-item si-item="item"></scav-item></li>
+  </ul>
+</div>

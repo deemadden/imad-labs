@@ -1,0 +1,19 @@
+@import "settings";
+@import "../bower_components/foundation/scss/foundation";
+
+body {
+  background-color: #C0C0C0;
+}
+
+.row:first-of-type {
+  margin-top: 20px;
+}
+
+.bottom-justify {
+  position: fixed;
+  bottom: 1px;
+}
+
+.button-green {
+  background-color: #3c9a5f;
+}

@@ -1,0 +1,60 @@
+p {
+  text-align: center;
+}
+
+.basestyle {
+
+  background-color: chartreuse;
+  position: absolute;
+  width: 200px;
+  height: 100px;
+  bottom: -100px;
+  left: 50px;
+
+  -webkit-transition-property: -webkit-transform;
+  -o-transition-property: -o-transform;
+  transition-property: transform;
+
+  -webkit-transition-duration: 0.25s;
+  -moz-transition-duration: 0.25s;
+  -o-transition-duration: 0.25s;
+  transition-duration: 0.25s;
+
+  -webkit-transition-timing-function: ease-in-out;
+  -moz-transition-timing-function: ease-in-out;
+  -o-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;
+
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  backface-visibility: hidden;
+
+  -webkit-perspective: 1000;
+  -moz-perspective: 1000;
+  -ms-perspective: 1000;
+  -o-perspective: 1000;
+  perspective: 1000;
+
+}
+
+.startingpoint {
+
+  -webkit-transform: translate3d(0px, 0, 0);
+  -moz-transform: translate3d(0px, 0, 0);
+  -ms-transform: translate3d(0px, 0, 0);
+  -o-transform: translate3d(0px, 0, 0);
+  transform: translate3d(0px, 0, 0);
+
+}
+
+.endingpoint {
+
+  -webkit-transform: translate3d(0px, -500px, 0);
+  -moz-transform: translate3d(0px, -500px, 0);
+  -ms-transform: translate3d(0px, -500px, 0);
+  -o-transform: translate3d(0px, -500px, 0);
+  transform: translate3d(0px, -500px, 0);
+
+}

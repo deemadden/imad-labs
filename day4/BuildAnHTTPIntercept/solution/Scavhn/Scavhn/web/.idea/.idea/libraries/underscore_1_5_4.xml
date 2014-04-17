@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="underscore-1.5.4" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/resources/js/lib/dev/underscore.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/resources/js/lib/dev/underscore.js" />
+      <root url="file://$PROJECT_DIR$/resources/js/lib/underscore-min.js" />
+    </CLASSES>
+    <DOCUMENTATION>
+      <root url="http://underscorejs.org/" />
+    </DOCUMENTATION>
+    <SOURCES />
+  </library>
+</component>
